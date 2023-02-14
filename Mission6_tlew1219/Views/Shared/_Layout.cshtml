@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="~/lib/bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="~/img/download (1).png">
+</head>
+
+<body class="bg-dark-subtle">
+
+    @*<nav>
+        <a asp-controller="Home" asp-action="Index">Home</a>
+        <a asp-controller="Home" asp-action="DatingApplication">Enter New Movie</a>
+        <a asp-controller="Home" asp-action="MyPodcasts">My Podcasts</a>
+    </nav>*@
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Movie Database</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active px-4">
+                    <a asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item px-4">
+                    <a asp-controller="Home" asp-action="DatingApplication">Enter Movie</a>
+                </li>
+                <li class="nav-item px-4">
+                    <a asp-controller="Home" asp-action="MyPodcasts">My Podcasts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/bootstrap/bootstrap-5.3.0-alpha1-dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
