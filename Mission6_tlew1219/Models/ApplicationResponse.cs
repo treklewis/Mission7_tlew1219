@@ -11,16 +11,22 @@ namespace Mission6_tlew1219.Models
         [Key]
         [Required]
         public int AppliationID { get; set; }
-        [Required]
-        public string Category { get; set; }
-        [Required]
+
+        //Foreign key relationship from movie to category
+        [Required(ErrorMessage ="Please select a category")]
+        public int CategoryID { get; set; }
+        [Required(ErrorMessage = "Please select a category")]
+        public Category Category { get; set; }
+
+        [Required(ErrorMessage = "Please enter a movie title")]
         public string Title { get; set; }
-        [Required]
-        public ushort Year { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter the year the movie was released")]
+        public int? Year { get; set; }
+        [Required(ErrorMessage = "Please enter the director for this movie")]
         public string Director { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Please select a rating")]
         public string Rating { get; set; }
+
         public bool Edited { get; set; }
         public string LentTo { get; set; }
         [StringLength(25, ErrorMessage = "Notes are limited to 25 characters.")]

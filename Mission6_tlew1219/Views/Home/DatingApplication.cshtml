@@ -3,12 +3,26 @@
 }
 
 @model  Mission6_tlew1219.Models.ApplicationResponse
-<h1>Fill out dating applicaiton form</h1>
+<h1>New Movie Form</h1>
 
+
+@*enter movie form*@
 <div>
-    <form action="" method="post">
-        <label asp-for="Category">Category:</label>
-        <input asp-for="Category" />
+
+    @*For handling errors*@
+    <div asp-validation-summary="All"></div>
+
+    <form method="post">
+        @*Drop down to select cateogry*@
+        <input asp-for="AppliationID" type="hidden"/>
+        <label asp-for="CategoryID">Category:</label>
+        <select asp-for="CategoryID">
+            <option value="">Select a Category</option>
+            @foreach (Category x in ViewBag.Categories)
+            {
+                <option value="@x.CategoryID">@x.Name</option>
+            }
+        </select>
         <br />
         <label asp-for="Title">Title:</label>
         <input asp-for="Title" />

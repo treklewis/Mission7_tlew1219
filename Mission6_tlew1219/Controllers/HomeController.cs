@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission6_tlew1219.Models;
 using System;
@@ -11,13 +12,11 @@ namespace Mission6_tlew1219.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private DateApplicationContext blahContext { get; set; }
+        private DateApplicationContext daContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, DateApplicationContext name)
+        public HomeController(DateApplicationContext name)
         {
-            _logger = logger;
-            blahContext = name;
+            daContext = name;
         }
 
         public IActionResult Index()
@@ -33,7 +32,9 @@ namespace Mission6_tlew1219.Controllers
         [HttpGet]
         public  IActionResult DatingApplication()
         {
-            return View("DatingApplication");
+            ViewBag.Categories = daContext.Categories.ToList();
+
+            return View(new ApplicationResponse());
         }
 
         [HttpPost]
@@ -41,25 +42,65 @@ namespace Mission6_tlew1219.Controllers
         {
             if (ModelState.IsValid)
             {
-                blahContext.Add(ar);
-                blahContext.SaveChanges();
+                daContext.Add(ar);
+                daContext.SaveChanges();
                 return View("response", ar);
             }
             else
             {
-                return DatingApplication();
+                ViewBag.Categories = daContext.Categories.ToList();
+                return View(ar);
             }
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult MovieList ()
+        {
+            var movies = daContext.responses
+                .Include(x => x.Category)
+                //.Where(xx => xx.Rating != "R")
+                .OrderBy(x => x.Rating)
+                .ToList();
+            return View(movies);
+        }
+
+        [HttpGet]
+        public IActionResult Edit (int applicationid)
+        {
+            ViewBag.Categories = daContext.Categories.ToList();
+
+            var application = daContext.responses.Single(x => x.AppliationID == applicationid);
+
+            return View("DatingApplication", application);
+        }
+
+        [HttpPost]
+        public IActionResult Edit (ApplicationResponse ar)
+        {
+            daContext.Update(ar);
+            daContext.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+        public IActionResult Delete ()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult Delete(int applicationid)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var application = daContext.responses.Single(x => x.AppliationID == applicationid);
+            return View(application);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(ApplicationResponse ar)
+        {
+            daContext.responses.Remove(ar);
+            daContext.SaveChanges();
+            return RedirectToAction("MovieList");
         }
     }
 }

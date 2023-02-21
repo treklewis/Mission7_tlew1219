@@ -8,7 +8,7 @@ using Mission6_tlew1219.Models;
 namespace Mission6_tlew1219.Migrations
 {
     [DbContext(typeof(DateApplicationContext))]
-    [Migration("20230214001108_Initial")]
+    [Migration("20230221174355_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,9 +23,8 @@ namespace Mission6_tlew1219.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -54,13 +53,15 @@ namespace Mission6_tlew1219.Migrations
 
                     b.HasKey("AppliationID");
 
+                    b.HasIndex("CategoryID");
+
                     b.ToTable("responses");
 
                     b.HasData(
                         new
                         {
                             AppliationID = 1,
-                            Category = "Thriller",
+                            CategoryID = 1,
                             Director = "Martin Scorcese",
                             Edited = true,
                             LentTo = "",
@@ -72,7 +73,7 @@ namespace Mission6_tlew1219.Migrations
                         new
                         {
                             AppliationID = 2,
-                            Category = "Adventure",
+                            CategoryID = 2,
                             Director = "Kevin Lima, Chris Buck",
                             Edited = false,
                             LentTo = "",
@@ -84,8 +85,8 @@ namespace Mission6_tlew1219.Migrations
                         new
                         {
                             AppliationID = 3,
-                            Category = "Mystery",
-                            Director = "Christopher Nolan ",
+                            CategoryID = 3,
+                            Director = "Christopher Nolan",
                             Edited = true,
                             LentTo = "",
                             Notes = "Mind blowing",
@@ -93,6 +94,46 @@ namespace Mission6_tlew1219.Migrations
                             Title = "Memento",
                             Year = (ushort)2000
                         });
+                });
+
+            modelBuilder.Entity("Mission6_tlew1219.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryID = 1,
+                            Name = "Thriller"
+                        },
+                        new
+                        {
+                            CategoryID = 2,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            CategoryID = 3,
+                            Name = "Mystery"
+                        });
+                });
+
+            modelBuilder.Entity("Mission6_tlew1219.Models.ApplicationResponse", b =>
+                {
+                    b.HasOne("Mission6_tlew1219.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
